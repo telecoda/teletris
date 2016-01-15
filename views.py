@@ -19,10 +19,11 @@ def load_image(file):
 
 class GameScreen(object):
 
-    def __init__(self,board):
+    def __init__(self,board,player):
                 
         self.screen = pygame.display.set_mode((BOARD_WIDTH*BLOCK_PIXELS, BOARD_HEIGHT*BLOCK_PIXELS))
         self.board = board
+        self.player = player
         self.init_assets()
         self.clock = pygame.time.Clock()
 
@@ -44,6 +45,7 @@ class GameScreen(object):
         background.fill((0, 0, 0))
         self.screen.blit(background, (0, 0))
         self.render_blocks()
+        self.render_player()
         self.clock.tick()
         print (self.clock.get_fps())
         pygame.display.flip()
@@ -55,10 +57,23 @@ class GameScreen(object):
                 self.render_block(block)
 
     def render_block(self,block):
-        xCoord = block.x * BLOCK_PIXELS
-        yCoord = block.y * BLOCK_PIXELS
+        self.render_block_at(block.x,block.y,block.colour)
 
-        if block.colour == EMPTY:
+    def render_block_at(self,x,y,colour):
+        xCoord = x * BLOCK_PIXELS
+        yCoord = y * BLOCK_PIXELS
+
+        if colour == EMPTY:
             return
 
-        self.screen.blit(self.images[block.colour],(xCoord,yCoord))
+        self.screen.blit(self.images[colour],(xCoord,yCoord))
+
+    def render_player(self):
+        # render player shape
+        blocks = self.player.get_shape_blocks()
+        for block in blocks:
+            # shape is composed of blocks, all blocks are relative to players position
+            self.render_block_at(self.player.x+block.x, self.player.y+block.y,block.colour)
+
+
+

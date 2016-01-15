@@ -25,6 +25,8 @@ def main():
 
     game = Tetris()
 
+    game.new_game()
+
     print game.board.cells[0][0]
     running = True
 
@@ -35,6 +37,8 @@ def main():
                 running = False
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 running = False
+            elif event.type == KEYDOWN and event.key == K_SPACE:
+                game.rotate()
 
         game.render()
 
