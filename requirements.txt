@@ -1,0 +1,2 @@
+pygame==1.9.2a0
+pytest==2.8.5
