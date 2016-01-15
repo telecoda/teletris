@@ -1,4 +1,4 @@
-#TETRIS - clone
+#TELETRIS - Tetris clone
 
 by @telecoda
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python2
 
 """
-Tetris - by @telecoda
+Teletris - by @telecoda
 
 An experiment in learning pygame
 
