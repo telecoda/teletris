@@ -21,7 +21,7 @@ class GameScreen(object):
 
     def __init__(self,board,player):
                 
-        self.screen = pygame.display.set_mode((BOARD_WIDTH*BLOCK_PIXELS, BOARD_HEIGHT*BLOCK_PIXELS))
+        self.screen = pygame.display.set_mode((BOARD_WIDTH*BLOCK_PIXELS + INFO_PANEL_WIDTH, BOARD_HEIGHT*BLOCK_PIXELS))
         self.board = board
         self.player = player
         self.init_assets()
@@ -39,7 +39,25 @@ class GameScreen(object):
         self.images[CYAN] = load_image('cyan_block.png')
         self.images[GREY] = load_image('grey_block.png')
 
-    def render(self):
+    # Rendered when @ playing state
+    def render_game_playing(self):
+        self.render_game_screen()
+        pygame.display.flip()
+
+    # Rendered when @ paused state
+    def render_game_paused(self):
+        self.render_game_screen()
+        self.render_pause_menu()
+        pygame.display.flip()
+
+    # Rendered when @ menu state
+    def render_menu(self):
+        self.render_game_screen()
+        self.render_start_menu()
+        pygame.display.flip()
+
+
+    def render_game_screen(self):
         background = pygame.Surface(self.screen.get_size())
         background = background.convert()
         background.fill((0, 0, 0))
@@ -47,9 +65,23 @@ class GameScreen(object):
         self.render_blocks()
         self.render_player()
         self.clock.tick()
-        print (self.clock.get_fps())
-        pygame.display.flip()
+        #print (self.clock.get_fps())
 
+    def render_pause_menu(self):
+        pass
+
+    def render_start_menu(self):
+        
+        if pygame.font:
+            font = pygame.font.Font(None, 36)
+            text = font.render("Teletris", 1, (255, 0, 0))
+            #textpos = text.get_rect(centerx=background.get_width()/2)
+            x_offset = text.get_width()/2
+            y_offset = text.get_height()/2
+            self.screen.blit(text, (BOARD_WIDTH*BLOCK_PIXELS+INFO_PANEL_WIDTH/2-x_offset,y_offset))
+
+    
+   
     def render_blocks(self):
         for y in range(0, BOARD_HEIGHT):
             for x in range(0, BOARD_WIDTH):

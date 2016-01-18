@@ -24,23 +24,9 @@ def main():
     pygame.mouse.set_visible(0)
 
     game = Tetris()
-
     game.new_game()
+    game.run()
 
-    print game.board.cells[0][0]
-    running = True
-
-    while running:
-        # Handle Input Events
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                running = False
-            elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                running = False
-            elif event.type == KEYDOWN and event.key == K_SPACE:
-                game.rotate()
-
-        game.render()
 
 if __name__ == "__main__":
     main()

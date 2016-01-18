@@ -31,7 +31,23 @@ class Board(object):
 
     # reset board to empty blocks
     def reset_board(self):
+        # fill with blank cells
         self.cells = [[Block(x,y,EMPTY) for y in range(BOARD_HEIGHT)] for x in range(BOARD_WIDTH)]
+
+        # add grey surrounding blocks
+        y = 0
+        for x in range(0,BOARD_WIDTH):
+            self.cells[x][y] = Block(x,y,GREY)
+        y = BOARD_HEIGHT -1
+        for x in range(0,BOARD_WIDTH):
+            self.cells[x][y] = Block(x,y,GREY)
+        x = 0
+        for y in range(0,BOARD_HEIGHT):
+            self.cells[x][y] = Block(x,y,GREY)
+        x = BOARD_WIDTH -1
+        for y in range(0,BOARD_HEIGHT):
+            self.cells[x][y] = Block(x,y,GREY)
+
 
 class Player(object):
 
@@ -40,11 +56,18 @@ class Player(object):
         self.x = 5
         self.y = 5
         #self.shape = SquareShape(RED)
-        self.shape = LShape(YELLOW)
+        #self.shape = LeftLShape(YELLOW)
+        #self.shape = RightLShape(GREEN)
+        #self.shape = BarShape(CYAN)
+        #self.shape = LeftStepShape(MAGENTA)
+        self.shape = RightStepShape(GREY)
 
     def get_shape_blocks(self):
         # gets a rotated version of a shape
         return self.shape.get_blocks()
+
+    def move_down(self):
+        self.y += 1
 
     def rotate(self):
         self.shape.rotate()
@@ -81,8 +104,31 @@ class SquareShape(Shape):
             )
         )
 
+class BarShape(Shape):
 
-class LShape(Shape):
+    def __init__(self,colour):
+        Shape.__init__(self,colour) #call Shape intializer
+
+        # view 0
+        self.views.append(
+            (
+                Block(0,3,colour),
+                Block(1,3,colour),
+                Block(2,3,colour),
+                Block(3,3,colour)
+            )
+        )
+        # view 1
+        self.views.append(
+            (
+                Block(2,0,colour),
+                Block(2,1,colour),
+                Block(2,2,colour),
+                Block(2,3,colour)
+            )
+        )
+
+class LeftLShape(Shape):
 
     def __init__(self,colour):
         Shape.__init__(self,colour) #call Shape intializer
@@ -123,3 +169,94 @@ class LShape(Shape):
                 Block(1,0,colour)
             )
         )
+
+class RightLShape(Shape):
+
+    def __init__(self,colour):
+        Shape.__init__(self,colour) #call Shape intializer
+
+        # view 0
+        self.views.append(
+            (
+                Block(0,0,colour),
+                Block(1,0,colour),
+                Block(2,0,colour),
+                Block(0,1,colour)
+            )
+        )
+        # view 1
+        self.views.append(
+            (
+                Block(2,0,colour),
+                Block(2,1,colour),
+                Block(2,2,colour),
+                Block(1,0,colour)
+            )
+        )
+        # view 2
+        self.views.append(
+            (
+                Block(0,2,colour),
+                Block(1,2,colour),
+                Block(2,2,colour),
+                Block(2,1,colour)
+            )
+        )
+        # view 3
+        self.views.append(
+            (
+                Block(0,0,colour),
+                Block(0,1,colour),
+                Block(0,2,colour),
+                Block(1,2,colour)
+            )
+        )
+
+class LeftStepShape(Shape):
+
+    def __init__(self,colour):
+        Shape.__init__(self,colour) #call Shape intializer
+
+        # view 0
+        self.views.append(
+            (
+                Block(0,2,colour),
+                Block(1,2,colour),
+                Block(1,1,colour),
+                Block(2,1,colour)
+            )
+        )
+        # view 1
+        self.views.append(
+            (
+                Block(0,0,colour),
+                Block(0,1,colour),
+                Block(1,1,colour),
+                Block(1,2,colour)
+            )
+        )
+
+class RightStepShape(Shape):
+
+    def __init__(self,colour):
+        Shape.__init__(self,colour) #call Shape intializer
+
+        # view 0
+        self.views.append(
+            (
+                Block(0,1,colour),
+                Block(1,1,colour),
+                Block(1,2,colour),
+                Block(2,2,colour)
+            )
+        )
+        # view 1
+        self.views.append(
+            (
+                Block(0,2,colour),
+                Block(0,1,colour),
+                Block(1,1,colour),
+                Block(1,0,colour)
+            )
+        )
+
