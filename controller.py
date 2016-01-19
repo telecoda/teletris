@@ -21,26 +21,70 @@ class Tetris(object):
         self.player = Player()
 
         # init game assets
-        self.screen = GameScreen(self.board, self.player)
+        self.screen = GameScreen(self)
 
-    def run(self):
+    def start_game(self):
+        self.state = PLAYING
+        self.player.set_random_shape()
         pygame.time.set_timer(BLOCK_DOWN_EVENT, 1000) # time in milliseconds
 
-        print self.board.cells[0][0]
-        running = True
+    def pause_game(self):
+        self.state = PAUSED
 
-        while running:
+    def resume_game(self):
+        self.state = PLAYING
+
+    def run(self):
+
+        print self.board.cells[0][0]
+        quit = False
+
+        while not quit:
             # Handle Input Events
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    running = False
-                elif event.type == KEYDOWN and event.key == K_ESCAPE:
-                    running = False
-                elif event.type == KEYDOWN and event.key == K_UP:
-                    self.rotate()
-                if event.type == BLOCK_DOWN_EVENT:
-                    self.move_down()
+            if self.state == PLAYING:
+                quit = self.handle_playing_events()
+            elif self.state == MENU:
+                quit = self.handle_menu_events()
+            elif self.state == PAUSED:
+                quit = self.handle_paused_events()
+
             self.render()
+
+    def handle_paused_events(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return True
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                return True
+            elif event.type == KEYDOWN and event.key == K_SPACE:
+                self.resume_game()
+        return False
+
+
+    def handle_playing_events(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return True
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                return True
+            elif event.type == KEYDOWN and event.key == K_UP:
+                self.rotate()
+            elif event.type == KEYDOWN and event.key == K_p:
+                self.pause_game()
+            if event.type == BLOCK_DOWN_EVENT:
+                self.move_down()
+        return False
+
+    def handle_menu_events(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return True
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                return True
+            elif event.type == KEYDOWN and event.key == K_SPACE:
+                self.start_game()                
+
+        return False
 
 
     def render(self):

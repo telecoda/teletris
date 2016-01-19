@@ -13,6 +13,7 @@ from pygame.locals import *
 from constants import *
 from controller import *
 
+
 def main():
     """
     Main routine and main loop
