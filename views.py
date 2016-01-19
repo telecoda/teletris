@@ -57,6 +57,13 @@ class GameScreen(object):
         self.render_pause_menu()
         pygame.display.flip()
 
+    # Rendered when @ game over state
+    def render_game_over(self):
+        self.render_game_panel()
+        self.render_info_panel()
+        self.render_game_over_menu()
+        pygame.display.flip()
+
     # Rendered when @ menu state
     def render_menu(self):
         self.render_game_panel()
@@ -98,6 +105,20 @@ class GameScreen(object):
             x_offset = text.get_width() / 2
             y_offset = text.get_height()
             self.screen.blit(text, (panel_centre_x - x_offset, y_offset * 4))
+
+    def render_game_over_menu(self):
+        if pygame.font:
+            # start menu
+            font = pygame.font.Font(None, 36)
+            text = font.render(
+                "Game Over: press SPACE to play again", 1, (255, 255, 0))
+            x_offset = text.get_width() / 2
+            y_offset = text.get_height() / 2
+
+            panel_centre_x = BOARD_WIDTH * BLOCK_PIXELS / 2
+            panel_centre_y = BOARD_HEIGHT * BLOCK_PIXELS / 2
+            self.screen.blit(
+                text, (panel_centre_x - x_offset, panel_centre_y - y_offset))
 
     def render_pause_menu(self):
         if pygame.font:

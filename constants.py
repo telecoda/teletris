@@ -9,6 +9,7 @@ BOARD_OFFSET_X = 32
 BOARD_OFFSET_Y = 32
 BLOCK_PIXELS = 32
 INFO_PANEL_WIDTH = 300
+BLOCK_SPEED = 500  # Speed blocks fall in milliseconds
 
 # Block colours
 EMPTY = 0
@@ -38,7 +39,8 @@ ALIVE = 1
 # Game states
 MENU = 0
 PLAYING = 1
-PAUSED = 3
+PAUSED = 2
+GAME_OVER = 3
 
 # Game events
 BLOCK_DOWN_EVENT = USEREVENT + 1

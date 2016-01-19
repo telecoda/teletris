@@ -40,6 +40,42 @@ class Board(object):
         for y in range(0, BOARD_HEIGHT):
             self.cells[x][y] = Block(x, y, GREY)
 
+    def can_player_fit_at(self, player, x, y):
+        """
+        Check if player's shape can move down one row
+        without colliding into any other blocks
+        """
+
+        blocks = player.get_shape_blocks()
+        if blocks is None:
+            return False
+
+        for block in blocks:
+            # check board is empty for all blocks
+            block_x = x + block.x
+            block_y = y + block.y
+            if self.cells[block_x][block_y].colour is not EMPTY:
+                return False
+
+        return True
+
+    def add_shape_to_board(self, player):
+        """
+        Shape has collided so add it to the permanent board
+        """
+
+        blocks = player.get_shape_blocks()
+        if blocks is None:
+            return
+
+        for block in blocks:
+            # check board is empty for all blocks
+            block_x = player.x + block.x
+            block_y = player.y + block.y
+            block.x = block_x
+            block.y = block_y
+            self.cells[block_x][block_y] = block
+
 
 class Player(object):
 
@@ -64,6 +100,12 @@ class Player(object):
 
     def move_down(self):
         self.y += 1
+
+    def move_left(self):
+        self.x -= 1
+
+    def move_right(self):
+        self.x += 1
 
     def rotate(self):
         self.shape.rotate()

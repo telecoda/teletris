@@ -3,6 +3,7 @@
 from models import *
 from views import *
 
+
 class Tetris(object):
 
     def __init__(self):
@@ -26,13 +27,17 @@ class Tetris(object):
     def start_game(self):
         self.state = PLAYING
         self.player.set_random_shape()
-        pygame.time.set_timer(BLOCK_DOWN_EVENT, 1000) # time in milliseconds
+        # time in milliseconds
+        pygame.time.set_timer(BLOCK_DOWN_EVENT, BLOCK_SPEED)
 
     def pause_game(self):
         self.state = PAUSED
 
     def resume_game(self):
         self.state = PLAYING
+
+    def game_over(self):
+        self.state = GAME_OVER
 
     def run(self):
 
@@ -47,6 +52,8 @@ class Tetris(object):
                 quit = self.handle_menu_events()
             elif self.state == PAUSED:
                 quit = self.handle_paused_events()
+            elif self.state == GAME_OVER:
+                quit = self.handle_game_over_events()
 
             self.render()
 
@@ -60,6 +67,15 @@ class Tetris(object):
                 self.resume_game()
         return False
 
+    def handle_game_over_events(self):
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                return True
+            elif event.type == KEYDOWN and event.key == K_ESCAPE:
+                return True
+            elif event.type == KEYDOWN and event.key == K_SPACE:
+                self.new_game()
+        return False
 
     def handle_playing_events(self):
         for event in pygame.event.get():
@@ -69,6 +85,12 @@ class Tetris(object):
                 return True
             elif event.type == KEYDOWN and event.key == K_UP:
                 self.rotate()
+            elif event.type == KEYDOWN and event.key == K_DOWN:
+                self.move_down()
+            elif event.type == KEYDOWN and event.key == K_LEFT:
+                self.move_left()
+            elif event.type == KEYDOWN and event.key == K_RIGHT:
+                self.move_right()
             elif event.type == KEYDOWN and event.key == K_p:
                 self.pause_game()
             if event.type == BLOCK_DOWN_EVENT:
@@ -82,10 +104,9 @@ class Tetris(object):
             elif event.type == KEYDOWN and event.key == K_ESCAPE:
                 return True
             elif event.type == KEYDOWN and event.key == K_SPACE:
-                self.start_game()                
+                self.start_game()
 
         return False
-
 
     def render(self):
 
@@ -93,6 +114,8 @@ class Tetris(object):
             self.render_playing()
         elif self.state == PAUSED:
             self.render_paused()
+        elif self.state == GAME_OVER:
+            self.render_game_over()
         else:
             self.render_menu()
 
@@ -102,6 +125,9 @@ class Tetris(object):
     def render_paused(self):
         self.screen.render_game_paused()
 
+    def render_game_over(self):
+        self.screen.render_game_over()
+
     def render_playing(self):
         self.screen.render_game_playing()
 
@@ -110,5 +136,25 @@ class Tetris(object):
         self.player.rotate()
 
     def move_down(self):
+        # test if player's block fits
 
-        self.player.move_down()
+        if self.board.can_player_fit_at(self.player, self.player.x, self.player.y + 1):
+            self.player.move_down()
+        else:
+            self.board.add_shape_to_board(self.player)
+            self.new_shape()
+
+    def move_left(self):
+        # test if player's block fits
+        if self.board.can_player_fit_at(self.player, self.player.x - 1, self.player.y):
+            self.player.move_left()
+
+    def move_right(self):
+        # test if player's block fits
+        if self.board.can_player_fit_at(self.player, self.player.x + 1, self.player.y):
+            self.player.move_right()
+
+    def new_shape(self):
+        self.player.set_random_shape()
+        if not self.board.can_player_fit_at(self.player, self.player.x, self.player.y):
+            self.game_over()
