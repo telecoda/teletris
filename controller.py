@@ -24,6 +24,9 @@ class Tetris(object):
         # init game assets
         self.screen = GameScreen(self)
 
+    def increase_score(self, amount):
+        self.score += amount
+
     def start_game(self):
         self.state = PLAYING
         self.player.set_random_shape()
@@ -95,6 +98,8 @@ class Tetris(object):
                 self.pause_game()
             if event.type == BLOCK_DOWN_EVENT:
                 self.move_down()
+            if event.type == ROWS_COMPLETE_EVENT:
+                self.destroy_rows(event.dict['rows'])
         return False
 
     def handle_menu_events(self):
@@ -132,8 +137,12 @@ class Tetris(object):
         self.screen.render_game_playing()
 
     def rotate(self):
-
+        # rotate shape
         self.player.rotate()
+        # check it still fits
+        if not self.board.can_player_fit_at(self.player, self.player.x, self.player.y):
+            # rotate it back
+            self.player.rotate_back()
 
     def move_down(self):
         # test if player's block fits
@@ -143,6 +152,7 @@ class Tetris(object):
         else:
             self.board.add_shape_to_board(self.player)
             self.new_shape()
+            self.board.check_complete_rows()
 
     def move_left(self):
         # test if player's block fits
@@ -158,3 +168,9 @@ class Tetris(object):
         self.player.set_random_shape()
         if not self.board.can_player_fit_at(self.player, self.player.x, self.player.y):
             self.game_over()
+
+    def destroy_rows(self, rows):
+        print 'boom! destroy rows %s' % rows
+        # increase score
+        self.increase_score(len(rows))
+        self.board.destroy_rows(rows)

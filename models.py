@@ -1,6 +1,7 @@
 # block.py
 
 import random
+import pygame
 from constants import *
 
 
@@ -76,6 +77,68 @@ class Board(object):
             block.y = block_y
             self.cells[block_x][block_y] = block
 
+    def check_complete_rows(self):
+        """
+        Check if there are any complete rows 
+        If any found, destroy them and increase score 
+        """
+
+        full_rows = []
+
+        # remember to ignore first and last grey rows
+        for y in range(1, BOARD_HEIGHT - 1):
+            row_full = True
+            # remember to ignore first and last grey columns
+            for x in range(1, BOARD_WIDTH - 1):
+                if self.cells[x][y].colour is EMPTY:
+                    row_full = False
+
+            if row_full:
+                full_rows.append(y)
+
+        if len(full_rows) > 0:
+            print 'full rows: %s' % full_rows
+            # publish it
+            event = pygame.event.Event(ROWS_COMPLETE_EVENT)
+            event.dict['rows'] = full_rows
+            pygame.event.post(event)
+
+    def destroy_rows(self, rows):
+        """
+        This method destroys ALL rows passed in the list
+        then readjusts the board to account for the destroyed rows
+        """
+
+        # give a list of rows to destroy
+        # the rows must be remove and the remaining rows adjusted
+        # and the the board must be refilled
+        for y in range(1, BOARD_HEIGHT - 1):
+            if y in rows:
+                # this is a row to destroy
+                # move all rows above it down 1 row
+                self.move_row_down(y)
+        # mark cells as empty
+        # for y in rows:
+        #    for x in range(1, BOARD_WIDTH - 1):
+        #        self.cells[x][y].colour = EMPTY
+
+    def move_row_down(self, last_row):
+
+        first_row = 1
+
+        for y in range(last_row, first_row, -1):
+            print "copying row %d to %d" % (y - 1, y)
+            for x in range(1, BOARD_WIDTH - 1):
+                # copy from row above
+                self.cells[x][y] = self.cells[x][y - 1]
+                # reset coords
+                self.cells[x][y].x = x
+                self.cells[x][y].y = y
+
+        # blank top row
+        for x in range(1, BOARD_WIDTH - 1):
+            self.cells[x][1] = Block(x, 1, EMPTY)
+
 
 class Player(object):
 
@@ -109,6 +172,9 @@ class Player(object):
 
     def rotate(self):
         self.shape.rotate()
+
+    def rotate_back(self):
+        self.shape.rotate_back()
 
     def set_random_shape(self):
         colour = random.choice(BLOCK_COLOURS)
@@ -150,6 +216,11 @@ class Shape(object):
         self.view_index += 1
         if self.view_index > len(self.views) - 1:
             self.view_index = 0
+
+    def rotate_back(self):
+        self.view_index -= 1
+        if self.view_index < 0:
+            self.view_index = len(self.views) - 1
 
     def get_blocks(self):
         return self.views[self.view_index]
