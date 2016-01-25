@@ -80,7 +80,6 @@ class Board(object):
     def check_complete_rows(self):
         """
         Check if there are any complete rows 
-        If any found, destroy them and increase score 
         """
 
         full_rows = []
@@ -117,10 +116,6 @@ class Board(object):
                 # this is a row to destroy
                 # move all rows above it down 1 row
                 self.move_row_down(y)
-        # mark cells as empty
-        # for y in rows:
-        #    for x in range(1, BOARD_WIDTH - 1):
-        #        self.cells[x][y].colour = EMPTY
 
     def move_row_down(self, last_row):
 
@@ -144,14 +139,8 @@ class Player(object):
 
     def __init__(self):
 
-        self.x = 6
-        self.y = 3
-        # self.shape = SquareShape(RED)
-        # self.shape = LeftLShape(YELLOW)
-        # self.shape = RightLShape(GREEN)
-        # self.shape = BarShape(CYAN)
-        # self.shape = LeftStepShape(MAGENTA)
-        # self.shape = RightStepShape(GREY)
+        self.x = BOARD_WIDTH / 2
+        self.y = 2
 
         self.shape = None
 
@@ -200,7 +189,7 @@ class Player(object):
             print 'right step'
 
         # position at top middle of board
-        self.x = 6
+        self.x = BOARD_WIDTH / 2
         self.y = 2
 
 

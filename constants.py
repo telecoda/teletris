@@ -11,8 +11,10 @@ BLOCK_PIXELS = 32
 INFO_PANEL_WIDTH = 300
 
 # speed
-BLOCK_SPEED = 500  # Speed blocks fall in milliseconds
+BLOCK_START_SPEED = 500  # Speed blocks fall in milliseconds
 KEY_REPEAT = 150  # Key repeat in milliseconds
+ROWS_PER_LEVEL = 5  # increase level every X rows
+LEVEL_SPEED_INCREASE = 50
 # Block colours
 EMPTY = 0
 RED = 1
@@ -47,3 +49,4 @@ GAME_OVER = 3
 # Game events
 BLOCK_DOWN_EVENT = USEREVENT + 1
 ROWS_COMPLETE_EVENT = USEREVENT + 2
+LEVEL_UP_EVENT = USEREVENT + 3

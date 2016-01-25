@@ -25,13 +25,22 @@ class Tetris(object):
         self.screen = GameScreen(self)
 
     def increase_score(self, amount):
+        before_score = self.score
+        before_level = before_score / ROWS_PER_LEVEL
         self.score += amount
+        after_score = self.score
+        after_level = after_score / ROWS_PER_LEVEL
+
+        # if increase level every X rows
+        if after_level > before_level:
+            event = pygame.event.Event(LEVEL_UP_EVENT)
+            pygame.event.post(event)
 
     def start_game(self):
         self.state = PLAYING
         self.player.set_random_shape()
         # time in milliseconds
-        pygame.time.set_timer(BLOCK_DOWN_EVENT, BLOCK_SPEED)
+        pygame.time.set_timer(BLOCK_DOWN_EVENT, BLOCK_START_SPEED)
 
     def pause_game(self):
         self.state = PAUSED
@@ -100,6 +109,8 @@ class Tetris(object):
                 self.move_down()
             if event.type == ROWS_COMPLETE_EVENT:
                 self.destroy_rows(event.dict['rows'])
+            if event.type == LEVEL_UP_EVENT:
+                self.level_up()
         return False
 
     def handle_menu_events(self):
@@ -170,7 +181,17 @@ class Tetris(object):
             self.game_over()
 
     def destroy_rows(self, rows):
-        print 'boom! destroy rows %s' % rows
+
+        self.board.destroy_rows(rows)
+
         # increase score
         self.increase_score(len(rows))
-        self.board.destroy_rows(rows)
+
+    def level_up(self):
+
+        # increase level
+        self.level += 1
+        # increase speed of blocks
+        pygame.time.set_timer(
+            BLOCK_DOWN_EVENT, BLOCK_START_SPEED -
+            ((self.level - 1) * LEVEL_SPEED_INCREASE))
