@@ -79,7 +79,6 @@ class GameScreen(object):
         self.render_blocks()
         self.render_player()
         self.clock.tick()
-        # print (self.clock.get_fps())
 
     def render_info_panel(self):
         if pygame.font:

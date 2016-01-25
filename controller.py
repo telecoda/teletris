@@ -53,7 +53,6 @@ class Tetris(object):
 
     def run(self):
 
-        print self.board.cells[0][0]
         quit = False
 
         while not quit:

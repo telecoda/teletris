@@ -96,7 +96,6 @@ class Board(object):
                 full_rows.append(y)
 
         if len(full_rows) > 0:
-            print 'full rows: %s' % full_rows
             # publish it
             event = pygame.event.Event(ROWS_COMPLETE_EVENT)
             event.dict['rows'] = full_rows
@@ -122,7 +121,6 @@ class Board(object):
         first_row = 1
 
         for y in range(last_row, first_row, -1):
-            print "copying row %d to %d" % (y - 1, y)
             for x in range(1, BOARD_WIDTH - 1):
                 # copy from row above
                 self.cells[x][y] = self.cells[x][y - 1]
@@ -171,22 +169,16 @@ class Player(object):
 
         if shape_type == SQUARE:
             self.shape = SquareShape(colour)
-            print 'square'
         elif shape_type == BAR:
             self.shape = BarShape(colour)
-            print 'bar'
         elif shape_type == LEFT_L:
             self.shape = LeftLShape(colour)
-            print 'left L'
         elif shape_type == RIGHT_L:
             self.shape = RightLShape(colour)
-            print 'right L'
         elif shape_type == LEFT_STEP:
             self.shape = LeftStepShape(colour)
-            print 'left step'
         elif shape_type == RIGHT_STEP:
             self.shape = RightStepShape(colour)
-            print 'right step'
 
         # position at top middle of board
         self.x = BOARD_WIDTH / 2
