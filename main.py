@@ -24,6 +24,7 @@ def main():
     pygame.display.set_caption(GAME_TITLE)
     pygame.mouse.set_visible(0)
 
+    pygame.key.set_repeat(KEY_REPEAT)
     game = Tetris()
     game.new_game()
     game.run()

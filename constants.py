@@ -9,8 +9,10 @@ BOARD_OFFSET_X = 32
 BOARD_OFFSET_Y = 32
 BLOCK_PIXELS = 32
 INFO_PANEL_WIDTH = 300
-BLOCK_SPEED = 500  # Speed blocks fall in milliseconds
 
+# speed
+BLOCK_SPEED = 500  # Speed blocks fall in milliseconds
+KEY_REPEAT = 150  # Key repeat in milliseconds
 # Block colours
 EMPTY = 0
 RED = 1
