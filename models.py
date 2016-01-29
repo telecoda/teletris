@@ -141,11 +141,17 @@ class Player(object):
         self.y = 2
 
         self.shape = None
+        self.next_shape = None
 
     def get_shape_blocks(self):
         # gets a rotated version of a shape
         if self.shape is not None:
             return self.shape.get_blocks()
+        return None
+
+    def get_next_shape_blocks(self):
+        if self.next_shape is not None:
+            return self.next_shape.get_blocks()
         return None
 
     def move_down(self):
@@ -163,22 +169,25 @@ class Player(object):
     def rotate_back(self):
         self.shape.rotate_back()
 
-    def set_random_shape(self):
+    def set_next_random_shape(self):
+
+        # copy next_shape
+        self.shape = self.next_shape
         colour = random.choice(BLOCK_COLOURS)
         shape_type = random.choice(SHAPE_TYPES)
 
         if shape_type == SQUARE:
-            self.shape = SquareShape(colour)
+            self.next_shape = SquareShape(colour)
         elif shape_type == BAR:
-            self.shape = BarShape(colour)
+            self.next_shape = BarShape(colour)
         elif shape_type == LEFT_L:
-            self.shape = LeftLShape(colour)
+            self.next_shape = LeftLShape(colour)
         elif shape_type == RIGHT_L:
-            self.shape = RightLShape(colour)
+            self.next_shape = RightLShape(colour)
         elif shape_type == LEFT_STEP:
-            self.shape = LeftStepShape(colour)
+            self.next_shape = LeftStepShape(colour)
         elif shape_type == RIGHT_STEP:
-            self.shape = RightStepShape(colour)
+            self.next_shape = RightStepShape(colour)
 
         # position at top middle of board
         self.x = BOARD_WIDTH / 2

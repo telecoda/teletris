@@ -2,12 +2,14 @@
 
 from models import *
 from views import *
+from sounds import *
 
 
 class Tetris(object):
 
     def __init__(self):
 
+        self.audio_manager = AudioManager()
         # reset game
         self.new_game()
 
@@ -38,15 +40,20 @@ class Tetris(object):
 
     def start_game(self):
         self.state = PLAYING
-        self.player.set_random_shape()
+        # do it twice to set current & next shape
+        self.player.set_next_random_shape()
+        self.player.set_next_random_shape()
+        self.audio_manager.start_music()
         # time in milliseconds
         pygame.time.set_timer(BLOCK_DOWN_EVENT, BLOCK_START_SPEED)
 
     def pause_game(self):
         self.state = PAUSED
+        self.audio_manager.pause_music()
 
     def resume_game(self):
         self.state = PLAYING
+        self.audio_manager.resume_music()
 
     def game_over(self):
         self.state = GAME_OVER
@@ -175,12 +182,13 @@ class Tetris(object):
             self.player.move_right()
 
     def new_shape(self):
-        self.player.set_random_shape()
+        self.player.set_next_random_shape()
         if not self.board.can_player_fit_at(self.player, self.player.x, self.player.y):
             self.game_over()
 
     def destroy_rows(self, rows):
 
+        self.audio_manager.play_boom()
         self.board.destroy_rows(rows)
 
         # increase score
