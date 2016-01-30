@@ -37,7 +37,7 @@ class AudioManager(object):
         self.boom_sound = load_sound('boom.wav')
         self.game_music = load_sound('game_music.wav')
 
-    def play_sound(self, sound, loops=1):
+    def play_sound(self, sound, loops=0):
 
         return sound.play(loops)
 

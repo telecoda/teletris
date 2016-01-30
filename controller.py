@@ -10,6 +10,13 @@ class Tetris(object):
     def __init__(self):
 
         self.audio_manager = AudioManager()
+        # init high scores
+        score_1 = Score(10, 123)
+        score_2 = Score(5, 123)
+        self.scores = [score_1, score_2]
+
+        print score_1
+        print self.scores
         # reset game
         self.new_game()
 

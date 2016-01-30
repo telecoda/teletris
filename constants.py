@@ -1,6 +1,9 @@
 from pygame.locals import *
 
 GAME_TITLE = 'Teletris'
+TOP_SCORES_COUNT = 5
+
+# initial scores
 
 # Board constants
 BOARD_WIDTH = 12
@@ -15,6 +18,7 @@ BLOCK_START_SPEED = 500  # Speed blocks fall in milliseconds
 KEY_REPEAT = 150  # Key repeat in milliseconds
 ROWS_PER_LEVEL = 5  # increase level every X rows
 LEVEL_SPEED_INCREASE = 50
+
 # Block colours
 EMPTY = 0
 RED = 1

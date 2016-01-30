@@ -131,13 +131,17 @@ class GameScreen(object):
                 self.font_24, level, panel_edge_x + 10, y, (255, 255, 255), -2, LEFT)
 
             y += 40
+            top_scores_title = 'Top %d scores' % TOP_SCORES_COUNT
+            self.render_shadow_text(
+                self.font_24, top_scores_title, panel_centre_x + 10, y, (0, 255, 0), -2, CENTRE)
+
             next = 'Next:'
             self.render_shadow_text(
-                self.font_24, next, panel_edge_x + 10, y, (255, 255, 255), -2, LEFT)
+                self.font_24, next, panel_edge_x + 10, (BOARD_HEIGHT - 4) * BLOCK_PIXELS, (255, 255, 255), -2, LEFT)
 
             # next block
             self.render_next_shape(
-                BOARD_WIDTH + 4, (y / BLOCK_PIXELS) + 1)
+                BOARD_WIDTH + 4, (BOARD_HEIGHT - 4))
 
     def render_shadow_text(self, font, text, x, y, colour, shadow_offset=-2, align=CENTRE):
         surface = font.render(text, 1, (0, 0, 0))
@@ -162,7 +166,8 @@ class GameScreen(object):
 
     def render_game_over_menu(self):
         self.render_alert_text("Game Over")
-        self.render_alert_text("press SPACE to play again", y_offset=40)
+        self.render_alert_text(
+            "press SPACE to play again", y_offset=40)
 
     def render_pause_menu(self):
         self.render_alert_text("Paused")
@@ -174,7 +179,6 @@ class GameScreen(object):
 
     def render_alert_text(self, text, colour=(255, 255, 0), y_offset=0):
         if pygame.font:
-
             screen_centre_x = (
                 BOARD_WIDTH * BLOCK_PIXELS) - BLOCK_PIXELS
             screen_centre_y = (

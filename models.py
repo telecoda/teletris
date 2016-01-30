@@ -194,6 +194,17 @@ class Player(object):
         self.y = 2
 
 
+class Score(object):
+
+    def __init__(self, score, time):
+
+        self.score = score
+        self.time = time
+
+    def __str__(self):
+        return "%d - %s" % (self.score, self.time)
+
+
 class Shape(object):
 
     def __init__(self, colour):
@@ -240,10 +251,10 @@ class BarShape(Shape):
         # view 0
         self.views.append(
             (
-                Block(0, 3, colour),
-                Block(1, 3, colour),
-                Block(2, 3, colour),
-                Block(3, 3, colour)
+                Block(0, 0, colour),
+                Block(1, 0, colour),
+                Block(2, 0, colour),
+                Block(3, 0, colour)
             )
         )
         # view 1
@@ -351,10 +362,10 @@ class LeftStepShape(Shape):
         # view 0
         self.views.append(
             (
-                Block(0, 2, colour),
-                Block(1, 2, colour),
+                Block(0, 1, colour),
                 Block(1, 1, colour),
-                Block(2, 1, colour)
+                Block(1, 0, colour),
+                Block(2, 0, colour)
             )
         )
         # view 1
@@ -376,10 +387,10 @@ class RightStepShape(Shape):
         # view 0
         self.views.append(
             (
-                Block(0, 1, colour),
+                Block(0, 0, colour),
+                Block(1, 0, colour),
                 Block(1, 1, colour),
-                Block(1, 2, colour),
-                Block(2, 2, colour)
+                Block(2, 1, colour)
             )
         )
         # view 1
