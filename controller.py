@@ -1,5 +1,7 @@
 # main controller to keep it all together
 
+import json
+
 from models import *
 from views import *
 from sounds import *
@@ -11,14 +13,25 @@ class Tetris(object):
 
         self.audio_manager = AudioManager()
         # init high scores
-        score_1 = Score(10, 123)
-        score_2 = Score(5, 123)
-        self.scores = [score_1, score_2]
+        self.load_high_scores()
 
-        print score_1
-        print self.scores
         # reset game
         self.new_game()
+
+    def load_high_scores(self):
+        try:
+            with open('data/scores.json') as data_file:
+                self.high_scores = json.load(data_file)
+        except:
+            self.high_scores = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+
+    def save_high_scores(self):
+        try:
+            with open('data/scores.json', 'w') as data_file:
+                json.dump(self.high_scores, data_file)
+                data_file.close()
+        except:
+            pass
 
     def new_game(self):
         self.score = 0
@@ -64,6 +77,17 @@ class Tetris(object):
 
     def game_over(self):
         self.state = GAME_OVER
+
+        # save scores
+        old_scores = self.high_scores
+
+        self.high_scores.append(self.score)
+        self.high_scores.sort(reverse=True)
+        self.high_scores = self.high_scores[0:10]
+
+        if old_scores != self.high_scores:
+            self.save_high_scores()
+            print "New high score entry!"
 
     def run(self):
 

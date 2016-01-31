@@ -194,17 +194,6 @@ class Player(object):
         self.y = 2
 
 
-class Score(object):
-
-    def __init__(self, score, time):
-
-        self.score = score
-        self.time = time
-
-    def __str__(self):
-        return "%d - %s" % (self.score, self.time)
-
-
 class Shape(object):
 
     def __init__(self, colour):

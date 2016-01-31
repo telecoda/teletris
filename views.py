@@ -131,9 +131,19 @@ class GameScreen(object):
                 self.font_24, level, panel_edge_x + 10, y, (255, 255, 255), -2, LEFT)
 
             y += 40
-            top_scores_title = 'Top %d scores' % TOP_SCORES_COUNT
+            top_scores_title = 'Top %d scores' % len(self.game.high_scores)
             self.render_shadow_text(
                 self.font_24, top_scores_title, panel_centre_x + 10, y, (0, 255, 0), -2, CENTRE)
+
+            scores = [30, 20, 10, 5, 2, 1, 1, 1, 1, 1]
+
+            i = 0
+            for score in self.game.high_scores:
+                i += 1
+                y += 30
+                score_str = '%d. %06d' % (i, score)
+                self.render_shadow_text(
+                    self.font_24, score_str, panel_centre_x - 100, y, (255, 0, 0), -2, LEFT)
 
             next = 'Next:'
             self.render_shadow_text(

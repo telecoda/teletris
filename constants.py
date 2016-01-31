@@ -1,7 +1,6 @@
 from pygame.locals import *
 
 GAME_TITLE = 'Teletris'
-TOP_SCORES_COUNT = 5
 
 # initial scores
 
