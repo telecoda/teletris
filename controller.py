@@ -87,7 +87,6 @@ class Tetris(object):
 
         if old_scores != self.high_scores:
             self.save_high_scores()
-            print "New high score entry!"
 
     def run(self):
 
@@ -221,6 +220,8 @@ class Tetris(object):
 
         self.audio_manager.play_boom()
         self.board.destroy_rows(rows)
+        for row in rows:
+            self.screen.add_fading_row(row)
 
         # increase score
         self.increase_score(len(rows))

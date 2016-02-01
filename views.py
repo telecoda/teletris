@@ -44,6 +44,8 @@ class GameScreen(object):
         self.init_assets()
         self.clock = pygame.time.Clock()
 
+        self.fading_blocks = []
+
     def init_assets(self):
         # this is where we load all the game assets
         self.images = {}
@@ -57,9 +59,26 @@ class GameScreen(object):
 
         self.images[GAME_BACKGROUND] = load_image('space_background.jpg')
 
+        self.fading_images = {}
+        self.fading_images[9] = load_image('white_block_10.png')
+        self.fading_images[8] = load_image('white_block_20.png')
+        self.fading_images[7] = load_image('white_block_30.png')
+        self.fading_images[6] = load_image('white_block_40.png')
+        self.fading_images[5] = load_image('white_block_50.png')
+        self.fading_images[4] = load_image('white_block_60.png')
+        self.fading_images[3] = load_image('white_block_70.png')
+        self.fading_images[2] = load_image('white_block_80.png')
+        self.fading_images[1] = load_image('white_block_90.png')
+        self.fading_images[0] = load_image('white_block_100.png')
         self.font_16 = load_font('space age.ttf', 16)
         self.font_24 = load_font('space age.ttf', 24)
         self.font_36 = load_font('space age.ttf', 36)
+
+    def add_fading_row(self, row):
+        # create fading blocks for each row
+        for x in range(1, BOARD_WIDTH - 1):
+            self.fading_blocks.append(
+                FadingBlock(self.screen, self.fading_images, x, row, 30))
 
     # Rendered when @ playing state
     def render_game_playing(self):
@@ -91,6 +110,7 @@ class GameScreen(object):
     def render_game_panel(self):
         self.screen.blit(self.images[GAME_BACKGROUND], (0, 0))
         self.render_blocks()
+        self.render_fading_blocks()
         self.render_player()
         self.clock.tick()
 
@@ -205,6 +225,12 @@ class GameScreen(object):
                 block = self.board.cells[x][y]
                 self.render_block(block)
 
+    def render_fading_blocks(self):
+        for block in self.fading_blocks:
+            if block.render():
+                # remove block
+                self.fading_blocks.remove(block)
+
     def render_block(self, block):
         self.render_block_at(block.x, block.y, block.colour)
 
@@ -236,3 +262,28 @@ class GameScreen(object):
                 # players position
                 self.render_block_at(
                     x_block + block.x, y_block + block.y, block.colour)
+
+
+class FadingBlock(object):
+    def __init__(self, screen, images, x, y, fade_speed):
+        self.screen = screen
+        self.images = images
+        self.fade_speed = fade_speed
+        self.current_frame = 0
+        self.opacity = 0
+        self.x = x * BLOCK_PIXELS
+        self.y = y * BLOCK_PIXELS
+
+    def render(self):
+        """
+        Returns True is fading is complete
+        """
+        self.current_frame += 1
+        if self.current_frame >= self.fade_speed:
+            self.opacity += 1
+
+        if self.opacity < 0 or self.opacity > len(self.images) - 1:
+            return True
+
+        self.screen.blit(self.images[self.opacity], (self.x, self.y))
+        return False
