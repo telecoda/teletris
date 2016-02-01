@@ -2,6 +2,9 @@
 
 by @telecoda
 
+![alt text][logo]
+[logo]: https://raw.githubusercontent.com/telecoda/teletris/master/data/screenshot.png "Screen shot"
+
 Simple pygame project for two reasons:
 
 - get back into python development
