@@ -2,9 +2,7 @@
 
 by @telecoda
 
-![alt text][logo]
-[logo]: https://raw.githubusercontent.com/telecoda/teletris/master/data/screenshot.png "Screen shot"
-
+![img](https://raw.githubusercontent.com/telecoda/teletris/master/data/screenshot.png) 
 Simple pygame project for two reasons:
 
 - get back into python development
